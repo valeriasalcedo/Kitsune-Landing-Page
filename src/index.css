@@ -1,0 +1,27 @@
+/* Reset básico para quitar el borde/margen blanco del viewport */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+/* Opcional: si quieres que todo el fondo sea del mismo morado del navbar */
+body {
+  background: #ffffff; /* usa el color de tu navbar */
+}
+
+/* Evita scroll horizontal por desfases de 1px en Windows */
+body { overflow-x: hidden; }
+
+/* Accesibilidad sin borde azul/blanco al buscar (opcional) */
+.nav__search-input:focus,
+.nav__search-btn:focus,
+.nav__action:focus {
+  outline: none;
+}

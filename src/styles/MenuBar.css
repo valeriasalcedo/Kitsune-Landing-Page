@@ -1,0 +1,116 @@
+/* Barra centrada, tipografía en MAYÚSCULAS y separación amplia */
+.menu{
+  background: #ffffff;
+  border-top: 1px solid rgba(0,0,0,.06);
+  border-bottom: 1px solid rgba(0,0,0,.06);
+}
+.menu__inner{
+  max-width: 1260px;
+  margin: 0 auto;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;     /* centrado como la referencia */
+  gap: 56px;                   /* espacio entre items */
+  padding-inline: 16px;
+}
+
+.menu__item{ position: relative; }
+.menu__link{
+  background: none;
+  border: none;
+  padding: 0;
+  font: 700 14px/1.2 "DM Sans", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  color: #181818;
+  letter-spacing: .6px;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.menu__link:hover{ color:#6a2c7a; } /* toque morado */
+.menu__chev{ margin-left: 6px; font-size: 12px; }
+
+
+/* --- Menú desplegable limpio y moderno --- */
+.menu__item--has-children .menu__dropdown {
+  position: absolute;
+  top: 130%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 10px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  padding: 12px 0;
+  list-style: none;
+  margin: 0;
+  display: none;
+  z-index: 20;
+  min-width: 220px;
+  opacity: 0;
+  transform-origin: top center;
+  transition: all 0.2s ease-in-out;
+}
+
+.menu__item--has-children.is-open .menu__dropdown {
+  display: block;
+  opacity: 1;
+  transform: translateX(-50%) scale(1);
+}
+
+/* --- Ítems del dropdown --- */
+.menu__dropdown-link {
+  display: block;
+  padding: 10px 18px;
+  text-decoration: none;
+  color: #333;
+  font-weight: 600;
+  font-size: 14px;
+  font-family: "DM Sans", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  transition: all 0.15s ease;
+}
+
+.menu__dropdown-link:hover {
+  background: #f7effb;        /* suave morado claro */
+  color: #7c3fa1;             /* morado principal */
+  padding-left: 22px;         /* leve movimiento al hover */
+}
+
+/* --- Flechita junto a CATEGORÍAS --- */
+.menu__chev {
+  margin-left: 5px;
+  font-size: 12px;
+  transition: transform 0.2s ease;
+  color: #7c3fa1;
+}
+
+.menu__item--has-children.is-open .menu__chev {
+  transform: rotate(180deg);
+}
+
+/* --- Ajustes responsivos --- */
+@media (max-width: 680px) {
+  .menu__item--has-children .menu__dropdown {
+    left: 0;
+    transform: none;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+  }
+}
+
+
+/* Responsive simple: reduce separación y usa click para abrir */
+@media (max-width: 900px){
+  .menu__inner{ gap: 28px; }
+}
+@media (max-width: 680px){
+  .menu__inner{
+    gap: 18px;
+    height: 52px;
+    overflow-x: auto;      /* permite hacer scroll horizontal si no cabe */
+    scrollbar-width: none;
+  }
+  .menu__inner::-webkit-scrollbar{ display:none; }
+  /* dropdown pegado al borde en móvil */
+  .menu__item--has-children .menu__dropdown{
+    left: 0; transform:none;
+  }
+}
