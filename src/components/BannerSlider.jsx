@@ -1,25 +1,18 @@
+// BannerSlider.jsx - ✅ RESPONSIVE
 import React, { useEffect, useMemo, useRef, useState } from "react";
 
-/**
- * Slider que AUTOCARGA todas las imágenes dentro de src/assets/banners/*
- * Formatos: png, jpg, jpeg, webp, gif
- * Orden: por nombre de archivo (alfabéticamente)
- * Usa autoplay, flechas, dots y pausa al hover. Sin CSS externo (styles inline).
- */
 export default function BannerSlider({
   interval = 3500,
   rounded = 16,
   pauseOnHover = true,
   fit = "cover", 
 }) {
-  // Vite: carga estática de la carpeta (debe ser ruta literal)
   const modules = import.meta.glob("/src/assets/banners/*.{png,jpg,jpeg,webp,gif}", { eager: true });
 
-  // Extrae las URLs y ordénalas por nombre
   const images = useMemo(() => {
     const list = Object.entries(modules).map(([path, mod]) => ({
       path,
-      src: mod.default || mod, // vite expone en default
+      src: mod.default || mod,
       name: path.split("/").pop()?.toLowerCase() || path,
     }));
     list.sort((a, b) => a.name.localeCompare(b.name));
@@ -46,7 +39,6 @@ export default function BannerSlider({
     setIdx((i) => (i + (next ? 1 : -1) + images.length) % images.length);
   };
 
-  // Gestos táctiles
   const onTouchStart = (e) => { const t = e.touches?.[0]; if (t) touchRef.current.x = t.clientX; };
   const onTouchEnd = (e) => {
     const t = e.changedTouches?.[0]; if (!t) return;
@@ -56,15 +48,15 @@ export default function BannerSlider({
 
   const st = {
     root: {
-    position: "relative",
-    width: "100%",
-    aspectRatio: "16 / 9",   // mantiene 16:9
-    maxHeight: "65vh",       // no ocupa más del 60% de la altura de la pantalla
-    borderRadius: rounded,
-    overflow: "hidden",
-    userSelect: "none",
-    background: "#1f1030",
-  },
+      position: "relative",
+      width: "100%",
+      aspectRatio: "16 / 9",
+      maxHeight: "65vh",
+      borderRadius: rounded,
+      overflow: "hidden",
+      userSelect: "none",
+      background: "#1f1030",
+    },
     track: {
       height: "100%",
       display: "flex",
@@ -75,12 +67,33 @@ export default function BannerSlider({
     img: {
       width: "100%",
       height: "100%",
-      objectFit: fit,           // "cover" o "contain"
+      objectFit: fit,
       objectPosition: "center",
       display: "block",
       background: fit === "contain" ? "#0000000d" : "transparent",
     },
-    left: { left: 10 }, right: { right: 10 },
+    arrow: {
+      position: "absolute",
+      top: "50%",
+      transform: "translateY(-50%)",
+      width: 48,
+      height: 48,
+      borderRadius: 999,
+      border: "none",
+      background: "rgba(255,255,255,.3)",
+      backdropFilter: "blur(8px)",
+      color: "#fff",
+      fontSize: 24,
+      fontWeight: 900,
+      cursor: "pointer",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      transition: "all .2s ease",
+      zIndex: 2,
+    },
+    left: { left: 10 },
+    right: { right: 10 },
     dots: {
       position: "absolute", left: 0, right: 0, bottom: 10,
       display: "flex", gap: 8, justifyContent: "center", alignItems: "center",
@@ -96,49 +109,66 @@ export default function BannerSlider({
       background: "linear-gradient(135deg,#5c2a7a,#392046)",
       fontFamily: "system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif",
       letterSpacing: .5,
-    }
+    },
+    media: `
+      @media (max-width: 768px) {
+        .banner-root { maxHeight: 50vh !important; borderRadius: 12px !important; }
+        .banner-arrow { width: 36px !important; height: 36px !important; fontSize: 18px !important; }
+        .banner-dots { bottom: 8px !important; gap: 6px !important; }
+      }
+      @media (max-width: 520px) {
+        .banner-root { maxHeight: 40vh !important; borderRadius: 10px !important; }
+        .banner-arrow { display: none !important; }
+        .banner-dots { bottom: 6px !important; }
+      }
+    `,
   };
 
   if (!images.length) {
     return (
-      <div style={st.root}>
-        <div style={st.empty}>Coloca imágenes en <code>src/assets/banners/</code></div>
-      </div>
+      <>
+        <style>{st.media}</style>
+        <div style={st.root} className="banner-root">
+          <div style={st.empty}>Coloca imágenes en <code>src/assets/banners/</code></div>
+        </div>
+      </>
     );
   }
 
   return (
-    <div
-      style={st.root}
-      onMouseEnter={() => (hoveringRef.current = true)}
-      onMouseLeave={() => (hoveringRef.current = false)}
-      onTouchStart={onTouchStart}
-      onTouchEnd={onTouchEnd}
-    >
-      <div style={st.track}>
-        {images.map((src, i) => (
-          <div key={i} style={st.slide}>
-            <img src={src} alt={`banner-${i}`} style={st.img} />
-          </div>
-        ))}
-      </div>
-
-      {/* Flechas */}
-      {images.length > 1 && (
-        <>
-          <button style={{ ...st.arrow, ...st.left }} onClick={() => go(false)} aria-label="Anterior">‹</button>
-          <button style={{ ...st.arrow, ...st.right }} onClick={() => go(true)} aria-label="Siguiente">›</button>
-        </>
-      )}
-
-      {/* Dots */}
-      {images.length > 1 && (
-        <div style={st.dots}>
-          {images.map((_, i) => (
-            <div key={i} style={st.dot(i === idx)} onClick={() => setIdx(i)} />
+    <>
+      <style>{st.media}</style>
+      <div
+        style={st.root}
+        className="banner-root"
+        onMouseEnter={() => (hoveringRef.current = true)}
+        onMouseLeave={() => (hoveringRef.current = false)}
+        onTouchStart={onTouchStart}
+        onTouchEnd={onTouchEnd}
+      >
+        <div style={st.track}>
+          {images.map((src, i) => (
+            <div key={i} style={st.slide}>
+              <img src={src} alt={`banner-${i}`} style={st.img} />
+            </div>
           ))}
         </div>
-      )}
-    </div>
+
+        {images.length > 1 && (
+          <>
+            <button style={{ ...st.arrow, ...st.left }} className="banner-arrow" onClick={() => go(false)} aria-label="Anterior">‹</button>
+            <button style={{ ...st.arrow, ...st.right }} className="banner-arrow" onClick={() => go(true)} aria-label="Siguiente">›</button>
+          </>
+        )}
+
+        {images.length > 1 && (
+          <div style={st.dots} className="banner-dots">
+            {images.map((_, i) => (
+              <div key={i} style={st.dot(i === idx)} onClick={() => setIdx(i)} />
+            ))}
+          </div>
+        )}
+      </div>
+    </>
   );
 }

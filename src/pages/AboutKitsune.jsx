@@ -1,7 +1,6 @@
 import React from "react";
 
 export default function AboutKitsune() {
-  // Paleta Kitsune
   const color = {
     purple: "#4e2b5b",
     pink:   "#ef5aa1",
@@ -11,7 +10,6 @@ export default function AboutKitsune() {
 
   const s = {
     page: { background: "#fff", color: color.dark },
-    // HERO
     hero: {
       position: "relative",
       minHeight: "72vh",
@@ -22,8 +20,7 @@ export default function AboutKitsune() {
     },
     heroBg: {
       position: "absolute", inset: 0,
-      background:
-        "url('/imgs/hero-anime.jpg') center/cover no-repeat", // <-- cambia por tu imagen
+      background: "url('/imgs/hero-anime.jpg') center/cover no-repeat",
       filter: "brightness(.95) saturate(1.05)",
       transform: "scale(1.02)",
     },
@@ -36,7 +33,6 @@ export default function AboutKitsune() {
       width: "55%",
       background: `linear-gradient(180deg, ${color.pink}, ${color.purple})`,
       opacity: .85,
-      filter: "blur(0)",
       clipPath: "polygon(18% 0, 100% 0, 100% 100%, 0 100%)",
     },
     heroInner: {
@@ -74,11 +70,9 @@ export default function AboutKitsune() {
     heroFigure: {
       width: "min(440px, 80%)",
       aspectRatio: "3/4",
-      background: `url('/imgs/kitsune-mascot.png') center/contain no-repeat`, // <-- pon tu zorro
+      background: `url('/imgs/kitsune-mascot.png') center/contain no-repeat`,
       filter: "drop-shadow(0 18px 40px rgba(0,0,0,.25))",
     },
-
-    // SECTION: texto + cards
     section: { width: "min(1200px,96%)", margin: "40px auto" },
     grid2: {
       display: "grid", gridTemplateColumns: "1.1fr 0.9fr", gap: 28,
@@ -92,7 +86,6 @@ export default function AboutKitsune() {
       padding: "6px 12px", fontWeight: 800, letterSpacing: ".3px",
       boxShadow: "0 8px 22px rgba(0,0,0,.15)",
     }),
-
     cardGrid: {
       display: "grid",
       gridTemplateColumns: "repeat(3,1fr)",
@@ -105,8 +98,6 @@ export default function AboutKitsune() {
     },
     cardTitle: { fontWeight: 900, color: color.purple, marginBottom: 6 },
     cardText: { color: "#5b4a6b", fontSize: 15, lineHeight: 1.5 },
-
-    // Stats
     stats: {
       marginTop: 24,
       display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 14,
@@ -119,8 +110,6 @@ export default function AboutKitsune() {
     },
     statNum: { fontWeight: 900, fontSize: 28, lineHeight: 1, marginBottom: 6 },
     statLabel: { letterSpacing: ".3px", opacity: .95 },
-
-    // CTA final
     strip: {
       margin: "48px auto", width: "min(1200px,96%)",
       background: `linear-gradient(90deg, ${color.red}, ${color.pink})`,
@@ -137,32 +126,36 @@ export default function AboutKitsune() {
       fontWeight: 800, border: "1px solid rgba(255,255,255,.35)",
       boxShadow: "0 8px 22px rgba(0,0,0,.25)",
     },
-
-    // responsive
     media: `
       @media (max-width: 980px){
-        .hero-grid { grid-template-columns: 1fr; }
-        .hero-inner { grid-template-columns: 1fr; }
-        .stats { grid-template-columns: repeat(2,1fr); }
-        .cards { grid-template-columns: 1fr 1fr; }
+        .hero-grid { grid-template-columns: 1fr !important; min-height: 60vh !important; }
+        .hero-inner { grid-template-columns: 1fr !important; padding: 32px 0 !important; }
+        .hero-shape { width: 70% !important; right: -20% !important; }
+        .grid2 { grid-template-columns: 1fr !important; }
+        .stats { grid-template-columns: repeat(2,1fr) !important; }
+        .cards { grid-template-columns: 1fr 1fr !important; }
+        .hero-figure-wrap { display: none !important; }
       }
       @media (max-width: 640px){
-        .cards { grid-template-columns: 1fr; }
-        .stats { grid-template-columns: 1fr 1fr; }
+        .cards { grid-template-columns: 1fr !important; }
+        .stats { grid-template-columns: 1fr 1fr !important; }
+        .hero-grid { min-height: 50vh !important; }
+        .hero-inner { padding: 24px 0 !important; }
+        .hero-overlay { background: linear-gradient(90deg, rgba(255,255,255,.95) 0%, rgba(255,255,255,.85) 70%, rgba(255,255,255,.7) 100%) !important; }
+        .strip { flex-direction: column !important; text-align: center !important; }
+        .ctas { justify-content: center !important; }
       }
+      @media (max-width: 480px){ .stats { grid-template-columns: 1fr !important; } }
     `,
   };
 
   return (
     <main style={s.page} id="quienes-somos">
       <style>{s.media}</style>
-
-      {/* HERO */}
       <section style={s.hero} className="hero-grid">
         <div style={s.heroBg} />
-        <div style={s.heroOverlay} />
-        <div style={s.heroShape} />
-
+        <div style={s.heroOverlay} className="hero-overlay" />
+        <div style={s.heroShape} className="hero-shape" />
         <div style={s.heroInner} className="hero-inner">
           <div style={s.heroTitleWrap}>
             <span style={s.chip}>Desde 2023</span>
@@ -176,22 +169,18 @@ export default function AboutKitsune() {
               a todo el país y presencia activa en múltiples bazares y eventos
               locales cada mes.
             </p>
-            <div style={s.ctas}>
+            <div style={s.ctas} className="ctas">
               <a href="/catalogo"><button style={s.ctaPrimary}>Ver Catálogo</button></a>
               <a href="/#contacto"><button style={s.ctaGhost}>Contáctanos</button></a>
             </div>
           </div>
-
-          <div style={s.heroFigureWrap}>
-            {/* Reemplaza la imagen del zorro por la tuya en s.heroFigure */}
+          <div style={s.heroFigureWrap} className="hero-figure-wrap">
             <div style={s.heroFigure} />
           </div>
         </div>
       </section>
-
-      {/* QUIÉNES SOMOS / MISIÓN */}
       <section style={s.section}>
-        <div style={s.grid2}>
+        <div style={s.grid2} className="grid2">
           <div>
             <h3 style={{ ...s.cardTitle, fontSize: 22 }}>¿Qué es Kitsune Store?</h3>
             <p style={s.lead}>
@@ -205,7 +194,6 @@ export default function AboutKitsune() {
               <span style={s.badge(color.red)}>Envíos seguros</span>
             </div>
           </div>
-
           <div className="cards" style={s.cardGrid}>
             <div style={s.card}>
               <div style={s.cardTitle}>Misión</div>
@@ -229,8 +217,6 @@ export default function AboutKitsune() {
             </div>
           </div>
         </div>
-
-        {/* Stats */}
         <div className="stats" style={s.stats}>
           <div style={s.stat}>
             <div style={s.statNum}>+3,000</div>
@@ -250,8 +236,6 @@ export default function AboutKitsune() {
           </div>
         </div>
       </section>
-
-      {/* Bazares / presencia */}
       <section style={{ ...s.section, marginTop: 24 }}>
         <h3 style={{ ...s.cardTitle, fontSize: 22, marginBottom: 10 }}>
           Participamos activamente en bazares
@@ -261,9 +245,7 @@ export default function AboutKitsune() {
           Expo Geek, Matsuri Local, Otaku Weekend y eventos universitarios. Publicamos agenda mensual en Instagram.
         </p>
       </section>
-
-      {/* CTA Instagram */}
-      <section style={s.strip}>
+      <section style={s.strip} className="strip">
         <div style={s.stripLeft}>¿Quieres saber dónde estaremos este fin de semana?</div>
         <a
           href="https://www.instagram.com/KitsuneStore_Ven"
@@ -277,7 +259,6 @@ export default function AboutKitsune() {
   );
 }
 
-/* --- Icono --- */
 function InstagramIcon(){
   return (
     <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden>

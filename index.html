@@ -1,13 +1,98 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="es">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>kitsune-store</title>
+    
+    <!-- ✅ CRÍTICO: Meta viewport para móviles -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" />
+    
+    <title>Kitsune Store - Tienda de Anime y Manga</title>
+    
+    <!-- Meta tags para SEO -->
+    <meta name="description" content="La mejor tienda de productos de anime, manga, K-pop y cultura japonesa" />
+    <meta name="keywords" content="anime, manga, kpop, otaku, merchandising, tienda" />
+    
+    <!-- Meta tags para redes sociales -->
+    <meta property="og:title" content="Kitsune Store" />
+    <meta property="og:description" content="La mejor tienda de anime y manga" />
+    <meta property="og:type" content="website" />
+    
+    <!-- Preconnect para mejorar rendimiento -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    
+    <!-- Google Fonts - DM Sans -->
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700;900&display=swap" rel="stylesheet" />
+    
+    <style>
+      /* ✅ CRÍTICO: Reset y prevención de scroll horizontal */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      
+      html {
+        overflow-x: hidden;
+        width: 100%;
+        max-width: 100vw;
+        position: relative;
+      }
+      
+      body {
+        font-family: 'DM Sans', system-ui, -apple-system, sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        overflow-x: hidden;
+        width: 100%;
+        max-width: 100vw;
+        position: relative;
+      }
+      
+      #root {
+        width: 100%;
+        max-width: 100vw;
+        overflow-x: hidden;
+        position: relative;
+      }
+      
+      /* ✅ Imágenes responsive por defecto */
+      img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+      }
+      
+      /* ✅ Loading spinner mientras carga React */
+      .app-loading {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      }
+      
+      .spinner {
+        width: 50px;
+        height: 50px;
+        border: 4px solid rgba(255,255,255,0.3);
+        border-top-color: #fff;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+      
+      @keyframes spin {
+        to { transform: rotate(360deg); }
+      }
+    </style>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <div class="app-loading">
+        <div class="spinner"></div>
+      </div>
+    </div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

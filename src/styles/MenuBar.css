@@ -1,36 +1,57 @@
+/* ═══════════════════════════════════════════════════════════════
+   MenuBar.css - VERSIÓN CON DROPDOWNS MÓVIL ARREGLADOS
+   ═══════════════════════════════════════════════════════════════ */
+
 /* Barra centrada, tipografía en MAYÚSCULAS y separación amplia */
-.menu{
+.menu {
   background: #ffffff;
-  border-top: 1px solid rgba(0,0,0,.06);
-  border-bottom: 1px solid rgba(0,0,0,.06);
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
 }
-.menu__inner{
+
+.menu__inner {
   max-width: 1260px;
   margin: 0 auto;
   height: 56px;
   display: flex;
   align-items: center;
-  justify-content: center;     /* centrado como la referencia */
-  gap: 56px;                   /* espacio entre items */
+  justify-content: center;
+  gap: 56px;
   padding-inline: 16px;
 }
 
-.menu__item{ position: relative; }
-.menu__link{
+.menu__item {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.menu__link {
   background: none;
   border: none;
   padding: 0;
-  font: 700 14px/1.2 "DM Sans", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  font: 700 14px/1.2 "DM Sans", system-ui, -apple-system, Segoe UI, Roboto,
+    Arial, sans-serif;
   color: #181818;
-  letter-spacing: .6px;
+  letter-spacing: 0.6px;
   text-transform: uppercase;
   cursor: pointer;
+  white-space: nowrap;
+  -webkit-tap-highlight-color: transparent; /* ✅ quita el highlight azul en móvil */
 }
-.menu__link:hover{ color:#6a2c7a; } /* toque morado */
-.menu__chev{ margin-left: 6px; font-size: 12px; }
 
+.menu__link:hover {
+  color: #6a2c7a;
+}
 
-/* --- Menú desplegable limpio y moderno --- */
+.menu__chev {
+  margin-left: 6px;
+  font-size: 12px;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   Menú desplegable limpio y moderno
+   ═══════════════════════════════════════════════════════════════ */
+
 .menu__item--has-children .menu__dropdown {
   position: absolute;
   top: 130%;
@@ -44,7 +65,7 @@
   list-style: none;
   margin: 0;
   display: none;
-  z-index: 20;
+  z-index: 9999; /* ✅ z-index MUY alto para asegurar que esté encima */
   min-width: 220px;
   opacity: 0;
   transform-origin: top center;
@@ -57,7 +78,10 @@
   transform: translateX(-50%) scale(1);
 }
 
-/* --- Ítems del dropdown --- */
+/* ═══════════════════════════════════════════════════════════════
+   Ítems del dropdown
+   ═══════════════════════════════════════════════════════════════ */
+
 .menu__dropdown-link {
   display: block;
   padding: 10px 18px;
@@ -65,17 +89,28 @@
   color: #333;
   font-weight: 600;
   font-size: 14px;
-  font-family: "DM Sans", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  font-family: "DM Sans", system-ui, -apple-system, Segoe UI, Roboto, Arial,
+    sans-serif;
   transition: all 0.15s ease;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .menu__dropdown-link:hover {
-  background: #f7effb;        /* suave morado claro */
-  color: #7c3fa1;             /* morado principal */
-  padding-left: 22px;         /* leve movimiento al hover */
+  background: #f7effb;
+  color: #7c3fa1;
+  padding-left: 22px;
 }
 
-/* --- Flechita junto a CATEGORÍAS --- */
+/* ✅ Touch feedback para móvil */
+.menu__dropdown-link:active {
+  background: #f0e5f7;
+  color: #6a2c7a;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   Flechita junto a CATEGORÍAS
+   ═══════════════════════════════════════════════════════════════ */
+
 .menu__chev {
   margin-left: 5px;
   font-size: 12px;
@@ -87,30 +122,94 @@
   transform: rotate(180deg);
 }
 
-/* --- Ajustes responsivos --- */
+/* ═══════════════════════════════════════════════════════════════
+   RESPONSIVE - Desktop → Tablet → Móvil
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Tablet: reduce separación */
+@media (max-width: 900px) {
+  .menu__inner {
+    gap: 28px;
+  }
+}
+
+/* Móvil: scroll horizontal + dropdowns FIJOS */
 @media (max-width: 680px) {
-  .menu__item--has-children .menu__dropdown {
-    left: 0;
-    transform: none;
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+  .menu {
+    position: relative; /* ✅ contexto para position sticky */
   }
-}
 
-
-/* Responsive simple: reduce separación y usa click para abrir */
-@media (max-width: 900px){
-  .menu__inner{ gap: 28px; }
-}
-@media (max-width: 680px){
-  .menu__inner{
-    gap: 18px;
+  .menu__inner {
+    justify-content: flex-start; /* ✅ empieza desde la izquierda */
+    gap: 24px;
     height: 52px;
-    overflow-x: auto;      /* permite hacer scroll horizontal si no cabe */
+    overflow-x: auto;
+    overflow-y: visible; /* ✅ CRÍTICO: permite que dropdowns se vean */
     scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
   }
-  .menu__inner::-webkit-scrollbar{ display:none; }
-  /* dropdown pegado al borde en móvil */
-  .menu__item--has-children .menu__dropdown{
-    left: 0; transform:none;
+
+  .menu__inner::-webkit-scrollbar {
+    display: none;
+  }
+
+  .menu__link {
+    font-size: 13px;
+  }
+
+  /* ✅ DROPDOWNS EN MÓVIL - POSICIÓN FIJA */
+  .menu__item--has-children {
+    position: static; /* ✅ CRÍTICO: hace que el dropdown use el viewport */
+  }
+
+  .menu__item--has-children .menu__dropdown {
+    position: fixed; /* ✅ CRÍTICO: fixed para que no se corte */
+    top: auto;
+    bottom: auto;
+    left: 16px; /* ✅ pegado al borde con padding */
+    right: 16px; /* ✅ ocupa todo el ancho menos padding */
+    transform: none;
+    max-width: none;
+    width: auto;
+    margin-top: 8px; /* ✅ separación del botón */
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  }
+
+  .menu__item--has-children.is-open .menu__dropdown {
+    transform: none;
+    transform: translateY(0); /* ✅ animación simple */
+  }
+
+  /* ✅ Calcular posición del dropdown dinámicamente via JS */
+  .menu__dropdown--positioned {
+    top: var(--dropdown-top, 100px); /* ✅ se calcula via JS */
+  }
+
+  .menu__dropdown-link {
+    padding: 12px 20px; /* ✅ más padding para touch */
+    font-size: 15px; /* ✅ más grande para móvil */
+  }
+
+  .menu__dropdown-link:hover {
+    padding-left: 20px; /* ✅ sin animación de padding en móvil */
+  }
+}
+
+/* ✅ Extra pequeño */
+@media (max-width: 400px) {
+  .menu__inner {
+    gap: 20px;
+    padding-inline: 12px;
+  }
+
+  .menu__link {
+    font-size: 12px;
+    letter-spacing: 0.4px;
+  }
+
+  .menu__item--has-children .menu__dropdown {
+    left: 12px;
+    right: 12px;
   }
 }

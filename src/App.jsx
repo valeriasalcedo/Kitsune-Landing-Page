@@ -6,7 +6,11 @@ import Footer from "./components/Footer";
 
 import Home from "./pages/Home";
 import AboutKitsune from "./pages/AboutKitsune";
-import CategoryPage from "./pages/CategoryPage"; // ← el componente de categoría con banner+filtro+grid
+import CategoryPage from "./pages/CategoryPage";
+import CollectionPage from "./pages/CollectionPage"; // ✅ Pantalla de colección
+import AnimePage from "./pages/AnimePage"; // ✅ Pantalla de anime
+import Nuevos from "./pages/Nuevos"; // ✅ Nueva pantalla
+import Ofertas from "./pages/Ofertas"; // ✅ Pantalla de ofertas
 
 // mini router
 function usePathname() {
@@ -60,7 +64,26 @@ export default function App() {
 
   if (path.startsWith("/quienes-somos")) {
     content = <AboutKitsune />;
-  } else if (path.startsWith("/categoria/")) {
+  } 
+  // ✅ Ruta para productos nuevos
+  else if (path === "/nuevos" || path.startsWith("/nuevos/")) {
+    content = <Nuevos />;
+  }
+  // ✅ Ruta para ofertas
+  else if (path === "/ofertas" || path.startsWith("/ofertas/")) {
+    content = <Ofertas />;
+  }
+  // ✅ Ruta para colecciones
+  else if (path.startsWith("/coleccion/")) {
+    const collectionId = path.replace("/coleccion/", "").split(/[?#]/)[0];
+    content = <CollectionPage collectionId={collectionId} />;
+  }
+  // ✅ Ruta para animes
+  else if (path.startsWith("/anime/")) {
+    const animeId = path.replace("/anime/", "").split(/[?#]/)[0];
+    content = <AnimePage animeId={animeId} />;
+  }
+  else if (path.startsWith("/categoria/")) {
     const slug = path.replace("/categoria/", "").split(/[?#]/)[0];
     const cfg = DATA[slug] || { title: slug, bannerImg: "/imgs/hero-anime.jpg", products: [] };
     content = (

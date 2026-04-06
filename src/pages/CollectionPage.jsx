@@ -1,7 +1,6 @@
-// src/pages/CategoryPage.jsx - ✅ RESPONSIVE
+// src/pages/CollectionPage.jsx - ✅ RESPONSIVE
 import React, { useMemo, useState } from "react";
-import { useCategory } from "../hooks/useCategories";
-import { useProducts } from "../hooks/useProducts";
+import { useCollection, useCollectionItems } from "../hooks/useCollections";
 import { useAnimes } from "../hooks/useAnimes";
 import ProductCard from "../components/ProductCard";
 import ProductModal from "../components/ProductModal";
@@ -13,7 +12,7 @@ const K = {
   dark: "#2b1440",
 };
 
-function CategoryBanner({ title, bannerImg, subtitle }) {
+function CollectionBanner({ title, bannerImg, subtitle }) {
   const s = {
     hero: {
       borderRadius: 18,
@@ -68,7 +67,7 @@ function CategoryBanner({ title, bannerImg, subtitle }) {
       <div style={s.overlay} />
       <div style={s.band} />
       <div style={s.inner} className="banner-inner">
-        <span style={s.chip}>CATEGORÍA</span>
+        <span style={s.chip}>COLECCIÓN</span>
         <h1 style={s.h1} className="banner-h1">{title}</h1>
         {!!subtitle && <p style={s.sub}>{subtitle}</p>}
       </div>
@@ -319,13 +318,13 @@ function Filters({
   );
 }
 
-export default function CategoryPage({ categoryId: categoryIdProp }) {
-  const categoryId =
-    categoryIdProp ??
-    window.location.pathname.replace("/categoria/", "").split(/[/?#]/)[0];
+export default function CollectionPage({ collectionId: collectionIdProp }) {
+  const collectionId =
+    collectionIdProp ??
+    window.location.pathname.replace("/coleccion/", "").split(/[/?#]/)[0];
 
-  const { category, loading: loadingCategory } = useCategory(categoryId);
-  const { products, loading: loadingProducts } = useProducts({ categoryId });
+  const { collection, loading: loadingCollection } = useCollection(collectionId);
+  const { items: products, loading: loadingProducts } = useCollectionItems(collectionId);
   const { animes, loading: loadingAnimes } = useAnimes();
 
   const [selectedAnimes, setSelectedAnimes] = useState([]);
@@ -416,34 +415,34 @@ export default function CategoryPage({ categoryId: categoryIdProp }) {
     `,
   };
 
-  if (!categoryId) {
+  if (!collectionId) {
     return (
       <main style={s.page} className="page-wrap">
         <style>{s.media}</style>
         <div style={s.wrap}>
-          <div style={s.loading}>ID de categoría inválido</div>
+          <div style={s.loading}>ID de colección inválido</div>
         </div>
       </main>
     );
   }
 
-  if (loadingCategory || loadingProducts) {
+  if (loadingCollection || loadingProducts) {
     return (
       <main style={s.page} className="page-wrap">
         <style>{s.media}</style>
         <div style={s.wrap}>
-          <div style={s.loading}>Cargando categoría...</div>
+          <div style={s.loading}>Cargando colección...</div>
         </div>
       </main>
     );
   }
 
-  if (!category) {
+  if (!collection) {
     return (
       <main style={s.page} className="page-wrap">
         <style>{s.media}</style>
         <div style={s.wrap}>
-          <div style={s.loading}>Categoría no encontrada</div>
+          <div style={s.loading}>Colección no encontrada</div>
         </div>
       </main>
     );
@@ -453,10 +452,10 @@ export default function CategoryPage({ categoryId: categoryIdProp }) {
     <main style={s.page} className="page-wrap">
       <style>{s.media}</style>
       <div style={s.wrap}>
-        <CategoryBanner
-          title={category.name || category.title}
-          bannerImg={category.image_url || category.img || "/imgs/hero-anime.jpg"}
-          subtitle={category.description}
+        <CollectionBanner
+          title={collection.name || collection.title}
+          bannerImg={collection.image_url || collection.img || "/imgs/hero-anime.jpg"}
+          subtitle={collection.description}
         />
 
         {!loadingAnimes && (

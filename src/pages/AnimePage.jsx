@@ -1,8 +1,8 @@
-// src/pages/CategoryPage.jsx - ✅ RESPONSIVE
+// src/pages/AnimePage.jsx - ✅ RESPONSIVE
 import React, { useMemo, useState } from "react";
-import { useCategory } from "../hooks/useCategories";
+import { useAnime } from "../hooks/useAnimes";
 import { useProducts } from "../hooks/useProducts";
-import { useAnimes } from "../hooks/useAnimes";
+import { useCategories } from "../hooks/useCategories";
 import ProductCard from "../components/ProductCard";
 import ProductModal from "../components/ProductModal";
 
@@ -13,7 +13,7 @@ const K = {
   dark: "#2b1440",
 };
 
-function CategoryBanner({ title, bannerImg, subtitle }) {
+function AnimeBanner({ title, bannerImg, subtitle }) {
   const s = {
     hero: {
       borderRadius: 18,
@@ -68,7 +68,7 @@ function CategoryBanner({ title, bannerImg, subtitle }) {
       <div style={s.overlay} />
       <div style={s.band} />
       <div style={s.inner} className="banner-inner">
-        <span style={s.chip}>CATEGORÍA</span>
+        <span style={s.chip}>ANIME</span>
         <h1 style={s.h1} className="banner-h1">{title}</h1>
         {!!subtitle && <p style={s.sub}>{subtitle}</p>}
       </div>
@@ -77,18 +77,18 @@ function CategoryBanner({ title, bannerImg, subtitle }) {
 }
 
 function Filters({
-  selectedAnimes,
-  setSelectedAnimes,
+  selectedCategories,
+  setSelectedCategories,
   minPrice,
   setMinPrice,
   maxPrice,
   setMaxPrice,
   sort,
   setSort,
-  animes,
+  categories,
   counts,
 }) {
-  const [showAnimes, setShowAnimes] = useState(false);
+  const [showCategories, setShowCategories] = useState(false);
 
   const s = {
     wrap: {
@@ -144,13 +144,13 @@ function Filters({
       fontWeight: 700,
       fontSize: 14,
     },
-    animeDropdown: { position: "relative" },
-    animeBtn: {
+    categoryDropdown: { position: "relative" },
+    categoryBtn: {
       padding: "8px 16px",
       borderRadius: 12,
       border: `2px solid ${K.purple}`,
-      background: selectedAnimes.length > 0 ? K.purple : "#fff",
-      color: selectedAnimes.length > 0 ? "#fff" : K.purple,
+      background: selectedCategories.length > 0 ? K.purple : "#fff",
+      color: selectedCategories.length > 0 ? "#fff" : K.purple,
       fontWeight: 800,
       cursor: "pointer",
       fontSize: 13,
@@ -158,7 +158,7 @@ function Filters({
       alignItems: "center",
       gap: 6,
     },
-    animeMenu: {
+    categoryMenu: {
       position: "absolute",
       top: "calc(100% + 6px)",
       left: 0,
@@ -171,7 +171,7 @@ function Filters({
       maxHeight: 280,
       overflowY: "auto",
     },
-    animeItem: {
+    categoryItem: {
       display: "flex",
       alignItems: "center",
       gap: 8,
@@ -202,9 +202,9 @@ function Filters({
     }),
   };
 
-  const toggleAnime = (animeId) => {
-    setSelectedAnimes((prev) =>
-      prev.includes(animeId) ? prev.filter((id) => id !== animeId) : [...prev, animeId]
+  const toggleCategory = (categoryId) => {
+    setSelectedCategories((prev) =>
+      prev.includes(categoryId) ? prev.filter((id) => id !== categoryId) : [...prev, categoryId]
     );
   };
 
@@ -212,48 +212,48 @@ function Filters({
     <div style={s.wrap} className="filters-wrap">
       <div style={s.row} className="filters-row">
         <div style={s.section} className="filters-section">
-          <span style={s.label} className="filters-label">Animes:</span>
+          <span style={s.label} className="filters-label">Categorías:</span>
 
-          <div style={s.animeDropdown} className="filters-dropdown">
-            <button style={s.animeBtn} onClick={() => setShowAnimes(!showAnimes)}>
-              {selectedAnimes.length > 0
-                ? `${selectedAnimes.length} seleccionado(s)`
-                : "Todos"}
+          <div style={s.categoryDropdown} className="filters-dropdown">
+            <button style={s.categoryBtn} onClick={() => setShowCategories(!showCategories)}>
+              {selectedCategories.length > 0
+                ? `${selectedCategories.length} seleccionada(s)`
+                : "Todas"}
               <span>▾</span>
             </button>
 
-            {showAnimes && (
-              <div style={s.animeMenu} className="filters-menu">
+            {showCategories && (
+              <div style={s.categoryMenu} className="filters-menu">
                 <div
-                  style={s.animeItem}
-                  onClick={() => setSelectedAnimes([])}
+                  style={s.categoryItem}
+                  onClick={() => setSelectedCategories([])}
                   onMouseEnter={(e) => (e.currentTarget.style.background = "#f3f4f6")}
                   onMouseLeave={(e) => (e.currentTarget.style.background = "")}
                 >
                   <input
                     type="checkbox"
-                    checked={selectedAnimes.length === 0}
+                    checked={selectedCategories.length === 0}
                     readOnly
                     style={s.checkbox}
                   />
-                  <span style={{ fontWeight: 700 }}>Todos</span>
+                  <span style={{ fontWeight: 700 }}>Todas</span>
                 </div>
 
-                {animes.map((anime) => (
+                {categories.map((category) => (
                   <div
-                    key={anime.id}
-                    style={s.animeItem}
-                    onClick={() => toggleAnime(anime.id)}
+                    key={category.id}
+                    style={s.categoryItem}
+                    onClick={() => toggleCategory(category.id)}
                     onMouseEnter={(e) => (e.currentTarget.style.background = "#f3f4f6")}
                     onMouseLeave={(e) => (e.currentTarget.style.background = "")}
                   >
                     <input
                       type="checkbox"
-                      checked={selectedAnimes.includes(anime.id)}
+                      checked={selectedCategories.includes(category.id)}
                       readOnly
                       style={s.checkbox}
                     />
-                    <span>{anime.title || anime.name}</span>
+                    <span>{category.name || category.title}</span>
                   </div>
                 ))}
               </div>
@@ -302,7 +302,7 @@ function Filters({
             onClick={() => {
               setMinPrice("");
               setMaxPrice("");
-              setSelectedAnimes([]);
+              setSelectedCategories([]);
               setSort("relevance");
             }}
             style={s.chip(false)}
@@ -319,16 +319,16 @@ function Filters({
   );
 }
 
-export default function CategoryPage({ categoryId: categoryIdProp }) {
-  const categoryId =
-    categoryIdProp ??
-    window.location.pathname.replace("/categoria/", "").split(/[/?#]/)[0];
+export default function AnimePage({ animeId: animeIdProp }) {
+  const animeId =
+    animeIdProp ??
+    window.location.pathname.replace("/anime/", "").split(/[/?#]/)[0];
 
-  const { category, loading: loadingCategory } = useCategory(categoryId);
-  const { products, loading: loadingProducts } = useProducts({ categoryId });
-  const { animes, loading: loadingAnimes } = useAnimes();
+  const { anime, loading: loadingAnime } = useAnime(animeId);
+  const { products, loading: loadingProducts } = useProducts({ animeId });
+  const { categories, loading: loadingCategories } = useCategories();
 
-  const [selectedAnimes, setSelectedAnimes] = useState([]);
+  const [selectedCategories, setSelectedCategories] = useState([]);
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
   const [sort, setSort] = useState("relevance");
@@ -337,8 +337,8 @@ export default function CategoryPage({ categoryId: categoryIdProp }) {
   const filtered = useMemo(() => {
     let arr = products;
 
-    if (selectedAnimes.length > 0) {
-      arr = arr.filter((p) => p.animes?.some((a) => selectedAnimes.includes(a.id)));
+    if (selectedCategories.length > 0) {
+      arr = arr.filter((p) => selectedCategories.includes(p.category_id));
     }
 
     const finalPrice = (p) => Number(p.final_price ?? p.price ?? 0);
@@ -354,7 +354,7 @@ export default function CategoryPage({ categoryId: categoryIdProp }) {
       arr = [...arr].sort((a, b) => (b.name || b.title).localeCompare(a.name || a.title));
 
     return arr;
-  }, [products, selectedAnimes, minPrice, maxPrice, sort]);
+  }, [products, selectedCategories, minPrice, maxPrice, sort]);
 
   const counts = { total: products.length, filtered: filtered.length };
 
@@ -416,34 +416,34 @@ export default function CategoryPage({ categoryId: categoryIdProp }) {
     `,
   };
 
-  if (!categoryId) {
+  if (!animeId) {
     return (
       <main style={s.page} className="page-wrap">
         <style>{s.media}</style>
         <div style={s.wrap}>
-          <div style={s.loading}>ID de categoría inválido</div>
+          <div style={s.loading}>ID de anime inválido</div>
         </div>
       </main>
     );
   }
 
-  if (loadingCategory || loadingProducts) {
+  if (loadingAnime || loadingProducts) {
     return (
       <main style={s.page} className="page-wrap">
         <style>{s.media}</style>
         <div style={s.wrap}>
-          <div style={s.loading}>Cargando categoría...</div>
+          <div style={s.loading}>Cargando anime...</div>
         </div>
       </main>
     );
   }
 
-  if (!category) {
+  if (!anime) {
     return (
       <main style={s.page} className="page-wrap">
         <style>{s.media}</style>
         <div style={s.wrap}>
-          <div style={s.loading}>Categoría no encontrada</div>
+          <div style={s.loading}>Anime no encontrado</div>
         </div>
       </main>
     );
@@ -453,23 +453,23 @@ export default function CategoryPage({ categoryId: categoryIdProp }) {
     <main style={s.page} className="page-wrap">
       <style>{s.media}</style>
       <div style={s.wrap}>
-        <CategoryBanner
-          title={category.name || category.title}
-          bannerImg={category.image_url || category.img || "/imgs/hero-anime.jpg"}
-          subtitle={category.description}
+        <AnimeBanner
+          title={anime.title || anime.name}
+          bannerImg={anime.image_url || anime.img || "/imgs/hero-anime.jpg"}
+          subtitle={anime.description}
         />
 
-        {!loadingAnimes && (
+        {!loadingCategories && (
           <Filters
-            selectedAnimes={selectedAnimes}
-            setSelectedAnimes={setSelectedAnimes}
+            selectedCategories={selectedCategories}
+            setSelectedCategories={setSelectedCategories}
             minPrice={minPrice}
             setMinPrice={setMinPrice}
             maxPrice={maxPrice}
             setMaxPrice={setMaxPrice}
             sort={sort}
             setSort={setSort}
-            animes={animes}
+            categories={categories}
             counts={counts}
           />
         )}

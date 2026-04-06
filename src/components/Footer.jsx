@@ -1,3 +1,4 @@
+// Footer.jsx - ✅ RESPONSIVE (ya tenía media queries, las mejoro)
 import React from "react";
 
 export default function Footer({
@@ -14,7 +15,6 @@ export default function Footer({
       marginTop: 28,
       position: "relative",
     },
-    // línea superior súper sutil
     topLine: {
       position: "absolute",
       left: 0, right: 0, top: 0, height: 1,
@@ -44,7 +44,7 @@ export default function Footer({
       border: "1px solid rgba(255,255,255,.25)",
       boxShadow: "0 8px 20px rgba(0,0,0,.20)",
       backdropFilter: "blur(6px)",
-      transform: "translateZ(0)", // mejor animación
+      transform: "translateZ(0)",
       transition: "background .2s ease, transform .2s ease",
     },
     igPillHover: {
@@ -67,45 +67,52 @@ export default function Footer({
     },
     media: `
       @media (max-width: 720px){
-        .f-row{ flex-direction: column; gap: 10px; }
-        .f-rights{ text-align: center; }
+        .f-row { flex-direction: column !important; gap: 10px !important; }
+        .f-rights { text-align: center !important; }
+        .f-wrap { padding: 12px 14px !important; }
+      }
+      @media (max-width: 520px){
+        .f-rights { flex-direction: column !important; gap: 4px !important; }
+        .f-dot { display: none !important; }
+        .f-ig-pill { font-size: 13px !important; padding: 7px 12px !important; }
       }
     `,
   };
 
   return (
-    <footer style={s.root}>
+    <>
       <style>{s.media}</style>
-      <div style={s.topLine} />
+      <footer style={s.root}>
+        <div style={s.topLine} />
 
-      <div className="f-row" style={s.wrap}>
-        {/* Instagram pill */}
-        <a
-          href={instagramUrl}
-          target="_blank"
-          rel="noreferrer"
-          style={s.igPill}
-          onMouseEnter={(e) => Object.assign(e.currentTarget.style, s.igPillHover)}
-          onMouseLeave={(e) =>
-            Object.assign(e.currentTarget.style, {
-              background: s.igPill.background,
-              transform: s.igPill.transform,
-            })
-          }
-        >
-          <InstagramIcon />
-          {instagram}
-        </a>
+        <div className="f-row f-wrap" style={s.wrap}>
+          <a
+            href={instagramUrl}
+            target="_blank"
+            rel="noreferrer"
+            style={s.igPill}
+            className="f-ig-pill"
+            onMouseEnter={(e) => Object.assign(e.currentTarget.style, s.igPillHover)}
+            onMouseLeave={(e) =>
+              Object.assign(e.currentTarget.style, {
+                background: s.igPill.background,
+                transform: s.igPill.transform,
+              })
+            }
+          >
+            <InstagramIcon />
+            {instagram}
+          </a>
 
-        {/* Derechos */}
-        <div className="f-rights" style={s.rights}>
-          <span style={{ opacity: 0.9 }}>© {new Date().getFullYear()}</span>
-          <span style={s.dot} />
-          <span style={{ fontWeight: 900 }}>{brand}</span>
-          <span style={{ opacity: 0.9 }}>· Todos los derechos reservados.</span>
+          <div className="f-rights" style={s.rights}>
+            <span style={{ opacity: 0.9 }}>© {new Date().getFullYear()}</span>
+            <span style={s.dot} className="f-dot" />
+            <span style={{ fontWeight: 900 }}>{brand}</span>
+            <span style={{ opacity: 0.9 }}>· Todos los derechos reservados.</span>
+          </div>
         </div>
-      </div>
-    </footer>
+      </footer>
+    </>
   );
 }
 

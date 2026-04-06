@@ -1,43 +1,92 @@
-// src/pages/Home.jsx
+// src/pages/Home.jsx - COMPLETO CON EVENTOS, ANIMES, COLECCIONES Y NOTICIAS
 import React from "react";
 import BannerSlider from "../components/BannerSlider";
 import MarqueeBanner from "../components/MarqueeBanner";
 import CategoryCarousel from "../components/CategoryCarousel";
 import ProductCarousel from "../components/ProductCarousel";
+import AnimeCarousel from "../components/AnimeCarousel";
+import CollectionCarousel from "../components/CollectionCarousel";
+import EventCarousel from "../components/EventCarousel";
+import NewsCarousel from "../components/NewsCarousel";
+import { useCategories } from "../hooks/useCategories";
+import { useAnimes } from "../hooks/useAnimes";
+import { useCollections } from "../hooks/useCollections";
+import { useProducts, useOffers } from "../hooks/useProducts";
+import { useNewsAndEvents } from "../hooks/useNewsEvents";
 
 export default function Home() {
-  // ⚠️ Usa imágenes desde /public/imgs/... (rutas absolutas)
-    const cats = [
-    { title: "Posters",  img:"../src/assets/poster.jpg",  href: "/categoria/posters" },
-    { title: "Figuras",  img: "../src/assets/figura.jpg",  href: "/categoria/figuras" },
-    { title: "Peluches", img: "../src/assets/peluche.jpg", href: "/categoria/peluches" },
-    { title: "K-Pop",    img: "../src/assets/K-pop.jpg",     href: "/categoria/kpop" },
-    { title: "Ropa",     img: "../src/assets/ropa.jpg",     href: "/categoria/ropa" },
-    { title: "Cosplay",  img: "../src/assets/cosplay.jpg",  href: "/categoria/cosplay" },
-  ];
+  // ✅ Fetch de datos del backend
+  const { categories, loading: loadingCats } = useCategories();
+  const { animes, loading: loadingAnimes } = useAnimes();
+  const { collections, loading: loadingCollections } = useCollections();
+  
+  // Productos nuevos (últimos 8)
+  const { products: nuevos, loading: loadingNew } = useProducts({ 
+    limit: 8,
+    offset: 0
+  });
+  
+  // Productos en oferta
+  const { products: ofertas, loading: loadingOffers } = useOffers();
 
-  const nuevos = [
-    { title: "Figura Kimetsu", img: "../src/assets/poster.jpg", price: 5, href: "/p/kimetsu" },
-    { title: "Poster Studio Ghibli", img: "../src/assets/figura.jpg", price: 4, href: "/p/ghibli" },
-    { title: "Gorra K-Pop", img: "../src/assets/peluche.jpg", price: 10, href: "/p/gorra" },
-    { title: "Peluches Kawaii", img: "../src/assets/peluche.jpg", price: 20, href: "/p/peluche" },
-  ];
-
-  const ofertas = [
-    { title: "Sudadera Anime", img: "../src/assets/peluche.jpg", price: 10, oldPrice: 20, href: "/p/sudadera" },
-    { title: "Llavero Chibi", img: "../src/assets/peluche.jpg", price: 15, oldPrice: 40, href: "/p/llavero" },
-    { title: "Set Mangas", img: "../src/assets/peluche.jpg", price: 5, oldPrice: 10, href: "/p/mangas" },
-    { title: "Figura One Piece", img: "../src/assets/peluche.jpg", price: 3, oldPrice: 8, href: "/p/onepiece" },
-  ];
+  // Noticias y eventos
+  const { events, newsItems, loading: loadingNews } = useNewsAndEvents({ limit: 20 });
 
   return (
     <>
-      <div style={{ padding: 12 }}><BannerSlider /></div>
-      <MarqueeBanner />
-      <CategoryCarousel title="Compra por categoría" items={cats} />
+      {/* Banner principal */}
+      <div style={{ padding: 12 }}>
+        <BannerSlider />
+      </div>
 
-      <ProductCarousel title="Nuevos"  viewAllText="Ver todos"       viewAllHref="/nuevos"  type="new"   items={nuevos} />
-      <ProductCarousel title="Ofertas" viewAllText="Ver más ofertas" viewAllHref="/ofertas" type="offer" items={ofertas} />
+      <MarqueeBanner />
+      
+      {/* ✅ EVENTOS - Después del banner */}
+      {!loadingNews && events.length > 0 && (
+        <EventCarousel title="Próximos Eventos" events={events} />
+      )}
+
+      {/* Categorías del backend */}
+      {!loadingCats && categories.length > 0 && (
+        <CategoryCarousel title="Compra por categoría" items={categories} />
+      )}
+
+      {/* ✅ ANIMES - Nuevo carrusel */}
+      {!loadingAnimes && animes.length > 0 && (
+        <AnimeCarousel title="Explora por Anime" items={animes} />
+      )}
+
+      {/* ✅ COLECCIONES - Nuevo carrusel */}
+      {!loadingCollections && collections.length > 0 && (
+        <CollectionCarousel title="Colecciones Especiales" items={collections} />
+      )}
+
+      {/* Productos Nuevos del backend */}
+      {!loadingNew && nuevos.length > 0 && (
+        <ProductCarousel 
+          title="Nuevos" 
+          viewAllText="Ver todos" 
+          viewAllHref="/nuevos" 
+          type="new" 
+          items={nuevos} 
+        />
+      )}
+
+      {/* Ofertas del backend */}
+      {!loadingOffers && ofertas.length > 0 && (
+        <ProductCarousel 
+          title="Ofertas" 
+          viewAllText="Ver más ofertas" 
+          viewAllHref="/ofertas" 
+          type="offer" 
+          items={ofertas} 
+        />
+      )}
+
+      {/* ✅ NOTICIAS - Al final */}
+      {!loadingNews && newsItems.length > 0 && (
+        <NewsCarousel title="Últimas Noticias" newsItems={newsItems} />
+      )}
     </>
   );
 }
